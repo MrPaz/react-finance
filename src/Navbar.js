@@ -2,30 +2,29 @@ import React, { Component } from 'react';
 
 class Navbar extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.state = {
             allSymbols: [],
-            searchValue: "",
-            matchedSymbols: []
-        }
+            searchValue: '',
+        };
     }
 
-    componentDidMount(){
-        fetch("https://api.iextrading.com/1.0/ref-data/symbols").then((response) => {
-            response.json().then((data) => {
-                this.setState( {allSymbols: data});
-            })
-        })
-    }
-
-    searchOnSubmit = function(e) {
+    searchOnSubmit = async function (e) {
         e.preventDefault();
         var searchValue = document.getElementsByName('search')[0].value.toLowerCase();
-        this.setState({searchValue: searchValue});
-        var matchedSymbols = this.state.allSymbols.filter(function(e) {return e.symbol.toLowerCase === searchValue 
-            || e.name.toLowerCase().indexOf(searchValue) >= 0});
-        this.setState({matchedSymbols: matchedSymbols });
+
+        if(this.state.allSymbols.length === 0){
+            var response = await fetch('https://api.iextrading.com/1.0/ref-data/symbols');
+            var data = await response.json();
+            this.setState({ allSymbols: data });
+        }
+        this.setState({ searchValue: searchValue });
+        var matchedSymbols = this.state.allSymbols.filter(function (e) { return e.symbol.toLowerCase() === searchValue || e.name.toLowerCase().indexOf(searchValue) >= 0 });
+
+        if(this.props.hasOwnProperty('setMatchedSymbols')){
+            this.props.setMatchedSymbols(matchedSymbols);
+        }
     }
 
   render() {
@@ -60,14 +59,14 @@ class Navbar extends Component {
                     </li>
                 </ul>
                 <form className="form-inline my-2 my-lg-0" onSubmit={e => this.searchOnSubmit(e)}>
-                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" list="symbols"/>
+                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" list="symbols" />
                     <datalist id="symbols">
-                        {this.state.matchedSymbols.map(function(e){return <option key={e.name} value={e.symbol}>{e.name}</option>})}
+                        {this.props.matchedSymbols.map(function (e) { return <option key={e.symbol} value={e.symbol}>{e.name}</option> })}
                     </datalist>
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
-        </nav>
+        </nav>  
     );
   }
 }
