@@ -10,20 +10,25 @@ class SymbolDetails extends Component {
 
     componentDidMount(){
         if(!this.state.loaded){
-            fetch('https://api.iextrading.com/1.0/stock/' + this.props.symbol.symbol + '/company')
+            let endpoint = !this.props.showFullDetail ? 'https://api.iextrading.com/1.0/stock/' + this.props.symbol.symbol + '/company' : 'https://api.iextrading.com/1.0/stock/' + this.props.symbol.symbol + '/batch?types=quote,news,chart,company&range=1m&last=10'
+
+            fetch(endpoint)
                 .then((response) => {
                     response.json().then((data) => {
-                        this.setState(state => {return {loaded: true, data: data}})
+                        if(!this.props.showFullDetail){
+                            this.setState(state => {return {loaded: true, data: data }});
+                        } 
+                        else{
+                            this.setState(state => {return {loaded: true, data: data.company, quote: data.quote, news: data.news, chart: data.chart }});
+                        }   
                     })
                 })
         }
     }
 
-  render() {
-    
-
-    return (
-        <div className="m-1 p-4 bg-secondary text-light rounded">
+    render() {    
+        return (
+            <div className="m-1 p-4 bg-dark text-light" >
             {!this.state.loaded ? <progress></progress> : <div>
                 <h1>{this.state.data.companyName}</h1>
                 <p>{this.state.data.description}</p>
@@ -37,11 +42,27 @@ class SymbolDetails extends Component {
                     <dt>Exchange</dt>
                     <dd>{this.state.data.exchange}</dd>
                 </dl>
-            </div>}
-            <a className="btn btn-block btn-primary" href={"/details/" + this.props.symbol.symbol }>{this.props.symbol.name}</a>    
+                {this.state.news && this.state.news.length > 0 ? 
+                <div>
+                    <h2>News</h2>
+                    {this.state.news.map(function(e, i){return <div key={i}>
+                    <blockquote>
+                        <img src={e.image} />
+                        <h3><a href={e.url}>{e.headline}</a></h3>
+                        <p>{e.summary}</p>
+                        <p>{e.related}</p>
+                        <cite>{e.source} @ {e.datetime}</cite>
+                    </blockquote>
+                    </div>})}
+
+                </div> :""}
+            </div>    
+            }
+        {this.props.showFullDetail ? "" : <a className="btn btn-block btn-primary" href={"/details/" + this.props.symbol.symbol }>{this.props.symbol.name}</a>}
+        
         </div>
-    );
-  }
+        );
+    }
 }
 
 export default SymbolDetails;
