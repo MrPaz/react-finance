@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import Company from './Company';
+import News from './News';
+import Chart from './Chart';
+import Quote from './Quote';
+import {NavLink} from 'react-router-dom';
 
 class SymbolDetails extends Component {
     constructor(){
@@ -28,40 +33,31 @@ class SymbolDetails extends Component {
 
     render() {    
         return (
-            <div className="m-1 p-4 bg-dark text-light" >
-            {!this.state.loaded ? <progress></progress> : <div>
-                <h1>{this.state.data.companyName}</h1>
-                <p>{this.state.data.description}</p>
-                <dl>
-                    <dt>Industry</dt>
-                    <dd>{this.state.data.industry}</dd>
-                    <dt>Sector</dt>
-                    <dd>{this.state.data.sector}</dd>
-                    <dt>CEO</dt>
-                    <dd>{this.state.data.CEO}</dd>
-                    <dt>Exchange</dt>
-                    <dd>{this.state.data.exchange}</dd>
-                </dl>
-                {this.state.news && this.state.news.length > 0 ? 
+            <div className="m-1 p-4 bg-dark text-light rounded" >
+            {!this.state.loaded ? <progress></progress> : this.props.showFullDetail ? <div>
+                <div className="row">
+                    <div className="col">
+                        <Company data={this.state.data} />
+                        <Quote data={this.state.quote} />
+                    </div>
+                        
+                    <div className="col">
+                        <News hello={this.state.news} />
+                    </div>
+                    </div>
+                    <div className="row">
+                    <div className="col">
+                        <Chart data={this.state.chart} />
+                    </div>
+                    </div>
+                </div> : 
                 <div>
-                    <h2>News</h2>
-                    {this.state.news.map(function(e, i){return <div key={i}>
-                    <blockquote>
-                        <img src={e.image} />
-                        <h3><a href={e.url}>{e.headline}</a></h3>
-                        <p>{e.summary}</p>
-                        <p>{e.related}</p>
-                        <cite>{e.source} @ {e.datetime}</cite>
-                    </blockquote>
-                    </div>})}
-
-                </div> :""}
-            </div>    
+                    <Company data={this.state.data} />
+                    {/* <a className="btn btn-block btn-primary" href={"/details/" + this.props.symbol.symbol }>{this.props.symbol.name}</a> */}
+                    <NavLink className="btn btn-block btn-primary" to={"/details/" + this.props.symbol.symbol }>{this.props.symbol.name}</NavLink>
+                </div>
             }
-        {this.props.showFullDetail ? "" : <a className="btn btn-block btn-primary" href={"/details/" + this.props.symbol.symbol }>{this.props.symbol.name}</a>}
-        
-        </div>
-        );
+            </div>);
     }
 }
 
