@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 class Chart extends Component {
-    
+
     componentDidMount(){
-        console.log('mounting');
         (function(){
             console.log('inside of callback');
             window.drawChart()
