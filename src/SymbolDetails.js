@@ -3,7 +3,7 @@ import Company from './Company';
 import News from './News';
 import Chart from './Chart';
 import Quote from './Quote';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class SymbolDetails extends Component {
     constructor(){
@@ -33,7 +33,7 @@ class SymbolDetails extends Component {
 
     render() {    
         return (
-            <div className="m-1 p-4 bg-dark text-light rounded" >
+            <div className="m-1 p-4 bg-secondary text-light rounded" >
             {!this.state.loaded ? <progress></progress> : this.props.showFullDetail ? <div>
                 <div className="row">
                     <div className="col">
@@ -42,11 +42,12 @@ class SymbolDetails extends Component {
                     </div>
                         
                     <div className="col">
-                        <News hello={this.state.news} />
+                        <News data={this.state.news} />
                     </div>
                     </div>
-                    <div className="row">
-                    <div className="col">
+                    <br></br>
+                    <div className="row rounded">
+                    <div className="col rounded">
                         <Chart data={this.state.chart} />
                     </div>
                     </div>

@@ -64,17 +64,11 @@ class Navbar extends Component {
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="dropdown.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
+                            Watchlist
                             </a>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="action.html">Action</a>
-                                <a className="dropdown-item" href="action2.html">Another action</a>
-                                <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="action3.html">Something else here</a>
+                                {/* <NavLink className="dropdown-item" to={"/search/" + searchValue}>{this.props.watchlist.map(function (e) {return <NavLink key={e.symbol} value={e.symbol}>{e.name}</NavLink>})}</NavLink> */}
                             </div>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link disabled" href="disabled.html" tabIndex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
                     <form className="form-inline my-2 my-lg-0" onSubmit={e => this.searchOnSubmit(e)}>

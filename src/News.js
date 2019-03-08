@@ -4,10 +4,10 @@ class News extends Component {
     render() {
         return (
             <div>
-                {this.props.hello && this.props.hello.length > 0 ? 
+                {this.props.data && this.props.data.length > 0 ? 
                     <div>
                         <h2>News</h2>
-                        {this.props.hello.map(function(e, i){return <div key={i}>
+                        {this.props.data.map(function(e, i){return <div key={i}>
                         <blockquote>
                             {/* <img src={e.image} /> */}
                             <h3><a href={e.url}>{e.headline}</a></h3>
