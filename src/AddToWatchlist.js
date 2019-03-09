@@ -1,32 +1,27 @@
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { exampleAction, loadAllSymbols, addToWatchlist } from './actions';
 
-const btnStyle = {
+var btnStyle = {
     backgroundColor: "#17a2b8",
     borderColor: "white",
     color: "white",
 }
+var symbol = this.props.match.params.symbol;
 
-var watchlistButton = "Add to Watchlist";
-if ( this.props.history.find(function(e){return e.symbol === this.props.data.symbol})){
-    watchlistButton = "Remove from Watchlist";
+var watchlistButtonText = "Add to Watchlist";
+if ( this.props.watchlist.find(function(e){return e.symbol === symbol})){
+    watchlistButtonText = "Remove from Watchlist";
 }
-
-function watchlist (symbol) {
-    if ( this.props.history.find(function(e){return e.symbol === this.props.data.symbol})){
-        this.props.history.Remove(symbol);
-    }
-    else{
-        this.props.history.push(symbol);
-    }
+var handleOnClick = () => {
+    this.props.addToWatchlist(symbol);
 }
 
 class AddToWatchlist extends Component {
   render() {  
     return (
-        <button className="btn btn-outline-success my-2 my-sm-0" style={btnStyle} type="submit" onSubmit={watchlist(this.props.data.symbol)}>{watchlistButton}</button>
+        <button className="btn btn-outline-success my-2 my-sm-0" style={btnStyle} type="submit" onClick={handleOnClick}>{watchlistButtonText}</button>
     );
   }
 }
